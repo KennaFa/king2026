@@ -6,12 +6,11 @@ app = Flask(__name__)
 app.secret_key = "bike_race_secret"
 
 # MySQL Config
-app.config.update(
-    MYSQL_HOST="localhost",
-    MYSQL_USER="root",
-    MYSQL_PASSWORD="",
-    MYSQL_DB="bike_race_db"
-)
+app.config["MYSQL_HOST"] = "localhost"
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = ""
+app.config["MYSQL_DB"] = "bike_race_db"
+app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 mysql = MySQL(app)
 
@@ -26,7 +25,7 @@ def validate_form(data):
         age = int(data["age"])
         if age < 10 or age > 100:
             errors.append("Age must be between 10 and 100.")
-    except ValueError:
+    except:
         errors.append("Age must be a number.")
 
     if data["category"] not in ["Beginner", "Intermediate", "Pro"]:
@@ -57,18 +56,19 @@ def register():
                 flash(error, "danger")
             return redirect(url_for("register"))
 
-        cur = mysql.connection.cursor()
         try:
+            cur = mysql.connection.cursor()
             cur.execute(
                 "INSERT INTO participants (full_name, age, category, email) VALUES (%s,%s,%s,%s)",
                 (form_data["full_name"], form_data["age"], form_data["category"], form_data["email"])
             )
             mysql.connection.commit()
-            flash(" Registration Successful!", "success")
-        except:
-            flash(" Email already registered.", "danger")
-        finally:
             cur.close()
+            flash("Registration successful!", "success")
+
+        except Exception as e:
+            flash("Email already registered OR database error.", "danger")
+            print("DB ERROR:", e)
 
         return redirect(url_for("register"))
 
@@ -77,11 +77,16 @@ def register():
 
 @app.route("/participants")
 def participants():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM participants ORDER BY id DESC")
-    data = cur.fetchall()
-    cur.close()
-    return render_template("participants.html", participants=data)
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM participants ORDER BY id DESC")
+        data = cur.fetchall()
+        cur.close()
+        return render_template("participants.html", participants=data)
+
+    except Exception as e:
+        print("FETCH ERROR:", e)
+        return "Database error. Check your terminal."
 
 
 if __name__ == "__main__":

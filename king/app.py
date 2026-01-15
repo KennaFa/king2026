@@ -67,8 +67,8 @@ def register():
             flash("Registration successful!", "success")
 
         except Exception as e:
-            flash("Email already registered OR database error.", "danger")
             print("DB ERROR:", e)
+            flash("Email already registered or database error.", "danger")
 
         return redirect(url_for("register"))
 
@@ -86,7 +86,7 @@ def participants():
 
     except Exception as e:
         print("FETCH ERROR:", e)
-        return "Database error. Check your terminal."
+        return "Database error. Check terminal."
 
 
 if __name__ == "__main__":

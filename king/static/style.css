@@ -1,0 +1,48 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+    background:
+        linear-gradient(to bottom right,
+        rgba(46,125,50,0.85),
+        rgba(27,94,32,0.9)),
+        url("../images/bg.png");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: "Times New Roman", serif;
+}
+
+/* Card */
+.card {
+    width: 500px;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.logo {
+    width: 120px;
+    display: block;
+    margin: auto;
+}
+
+.creator {
+    text-align: center;
+    margin-top: 15px;
+    font-style: italic;
+    color: #2e7d32;
+}
+
+.btn-custom {
+    background: linear-gradient(45deg, #4caf50, #2e7d32);
+    color: white;
+    font-weight: bold;
+}

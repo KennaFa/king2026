@@ -26,8 +26,18 @@
                 <td>{{ p[4] }}</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+            
+      <tbody>
+{% for p in participants %}
+<tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.full_name }}</td>
+    <td>{{ p.age }}</td>
+    <td>{{ p.category }}</td>
+    <td>{{ p.email }}</td>
+</tr>
+{% endfor %}
+</tbody>
 
     <div class="text-center">
         <a href="/" class="btn btn-outline-light">Back</a>
@@ -35,3 +45,4 @@
 </div>
 </body>
 </html>
+
